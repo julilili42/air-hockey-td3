@@ -26,6 +26,12 @@ S.~Fujimoto, H.~van Hoof, and D.~Meger.
 \newblock Addressing function approximation error in actor-critic methods.
 \newblock In J.~Dy and A.~Krause, editors, {\em Proceedings of the 35th International Conference on Machine Learning}, volume~80 of {\em Proceedings of Machine Learning Research}, pages 1587--1596, Stockholmsmässan, Stockholm Sweden, 10--15 Jul 2018. PMLR.
 
+\bibitem{jurcevic2026airhockey}
+J.~Jurcevic.
+\newblock air-hockey-td3: Td3 with curriculum learning and self-play.
+\newblock \url{https://github.com/julilili42/air-hockey-td3}, 2026.
+\newblock GitHub repository.
+
 \bibitem{lillicrap2015ddpg}
 T.~P. Lillicrap, J.~J. Hunt, A.~Pritzel, N.~Heess, T.~Erez, Y.~Tassa, D.~Silver, and D.~Wierstra.
 \newblock Continuous control with deep reinforcement learning.
