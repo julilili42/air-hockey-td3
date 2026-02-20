@@ -15,7 +15,6 @@ def main():
     parser.add_argument("--weak", action="store_true")
     args = parser.parse_args()
 
-    # Einfach One-v0 benutzen
     env = gym.make(
         "Hockey-One-v0",
         weak_opponent=args.weak

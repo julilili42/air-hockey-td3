@@ -1,17 +1,4 @@
 class EarlyStopping:
-    """
-    Stops training when monitored metric has stopped improving.
-
-    Parameters
-    ----------
-    patience : int
-        Number of evaluations without improvement before stopping.
-    min_delta : float
-        Minimum improvement required to reset patience.
-    mode : str
-        "max" (higher is better) or "min" (lower is better).
-    """
-
     def __init__(self, patience=5, min_delta=0.01, mode="max"):
         self.patience = patience
         self.min_delta = min_delta

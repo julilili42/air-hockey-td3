@@ -6,12 +6,9 @@ from types import SimpleNamespace
 
 
 plt.rcParams.update({
-    # Figure
     "figure.figsize": (5.5, 3.5),   
     "figure.dpi": 300,
     "savefig.dpi": 300,
-
-    # Fonts
     "font.family": "DejaVu Sans",
     "font.size": 11,
     "axes.labelsize": 11,
@@ -19,16 +16,10 @@ plt.rcParams.update({
     "legend.fontsize": 9,
     "xtick.labelsize": 9,
     "ytick.labelsize": 9,
-
-    # Lines
     "lines.linewidth": 1.5,
-
-    # Grid
     "axes.grid": True,
     "grid.alpha": 0.25,
     "grid.linestyle": "--",
-
-    # Remove top/right border
     "axes.spines.top": False,
     "axes.spines.right": False,
 })
@@ -153,7 +144,7 @@ class MetricsPlotter:
     save_dir,
     window=100,
     eval_interval=200,
-    show="weak"  # "weak" | "strong" | "both" | "min"
+    show="weak"  
     ):
         rewards = np.array(self.metrics.episode_rewards)
         weak_wr = np.array(self.metrics.winrate_weak)
@@ -165,7 +156,6 @@ class MetricsPlotter:
 
         fig, ax1 = plt.subplots()
 
-        # ---- Moving average + std ----
         ma = np.convolve(
             rewards,
             np.ones(window) / window,
@@ -198,7 +188,6 @@ class MetricsPlotter:
         ax1.set_xlabel("Episodes")
         ax1.set_ylabel("Average Return")
 
-        # ---- Winrate axis ----
         ax2 = ax1.twinx()
 
         if len(weak_wr) > 0:
@@ -257,7 +246,6 @@ class MetricsPlotter:
             label="Random"
         )
 
-        # ---- Dynamic y-limit with small headroom ----
         if plotted:
             max_val = max(arr.max() for arr in plotted)
             upper = min(1.02, max_val + 0.02)
@@ -267,7 +255,6 @@ class MetricsPlotter:
 
         ax2.set_ylabel("Winrate")
 
-        # ---- Combined legend ----
         lines1, labels1 = ax1.get_legend_handles_labels()
         lines2, labels2 = ax2.get_legend_handles_labels()
 
@@ -302,7 +289,6 @@ class MetricsPlotter:
 
         plt.figure()
 
-        # Stacked area plot für echte Verteilung
         plt.stackplot(
             episodes,
             strong,
@@ -312,7 +298,6 @@ class MetricsPlotter:
             alpha=0.7
         )
 
-        # self_play_prob als Linie drüber
         plt.plot(
             episodes,
             sp_prob,
@@ -365,7 +350,6 @@ class MetricsPlotter:
 
         metrics = SimpleNamespace(**data)
 
-        # Map plural names from JSON to singular names used in plotter
         mapping = {
             "winrate_strong": "winrates_strong",
             "winrate_weak": "winrates_weak",
@@ -378,7 +362,6 @@ class MetricsPlotter:
             else:
                 setattr(metrics, new_name, [])
 
-        # Ensure optional fields exist
         optional_fields = [
             "episode_rewards",
             "actor_losses",
@@ -392,7 +375,6 @@ class MetricsPlotter:
             if not hasattr(metrics, field):
                 setattr(metrics, field, [])
 
-        # Add moving average
         def moving_avg(window):
             rewards = np.array(metrics.episode_rewards)
             if len(rewards) < window:

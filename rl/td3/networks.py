@@ -2,7 +2,6 @@ import torch
 import torch.nn as nn
 
 
-# define ffw network
 class ActorNetwork(nn.Module):
     def __init__(
         self, input_size, output_size, act=torch.tanh, act_out=torch.tanh, h=256

@@ -13,9 +13,6 @@ class ModelManager:
         os.makedirs(self.model_dir, exist_ok=True)
 
     def update(self, agent, score, episode):
-        """
-        Check if score improved and save model if necessary.
-        """
         if score > self.best_score + self.min_delta:
             self.best_score = score
 

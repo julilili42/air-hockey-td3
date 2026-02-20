@@ -8,7 +8,7 @@ class ActionNoise:
     def reset(self):
         pass
 
-# OU Noise taken from keras ddpg implementation
+# OU Noise taken from https://keras.io/examples/rl/ddpg_pendulum/
 class OrnsteinUhlenbeckNoise(ActionNoise):
     def __init__(self, mean, std_deviation, theta=0.15, dt=1e-2, x_initial=None):
         self.theta = theta
@@ -73,28 +73,21 @@ class PinkNoise(ActionNoise):
         n = self.seq_len
         dim = self.shape[0]
 
-        # Frequencies for real FFT
         freqs = rfftfreq(n)
 
-        # Avoid division by zero at DC
         freqs[0] = freqs[1] if len(freqs) > 1 else 1.0
 
-        # Pink noise scaling: 1 / sqrt(f)
         scaling = 1.0 / np.sqrt(freqs)
 
-        # Generate random complex coefficients
         real = self.rng.normal(size=(dim, len(freqs)))
         imag = self.rng.normal(size=(dim, len(freqs)))
 
         spectrum = (real + 1j * imag) * scaling
 
-        # Ensure DC is real
         spectrum[:, 0] = spectrum[:, 0].real + 0j
 
-        # Transform back to time domain
         noise = irfft(spectrum, n=n, axis=-1)
 
-        # Normalize to unit variance
         noise /= np.std(noise, axis=-1, keepdims=True)
 
         return noise
