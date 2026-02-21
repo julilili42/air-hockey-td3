@@ -120,3 +120,4 @@ The model path is configured in `rl/play.py`.
 
 - **Report:** [`latex/report/template.pdf`](latex/report/template.pdf)
 - **Presentation:** [`latex/presentation/main.pdf`](latex/presentation/main.pdf)
+- **Video:** [`latex/presentation/video/output.mov`](latex/presentation/video/output.mov)
