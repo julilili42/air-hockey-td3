@@ -11,8 +11,10 @@
 % =================================================
 \usepackage{amsmath}
 \usepackage{amssymb}
+\usepackage{media9}
 \usepackage{booktabs}
 \usepackage{graphicx}
+\usepackage{comment}
 \usepackage{tikz}
 \usepackage{xcolor}
 \usepackage{colortbl}
@@ -70,6 +72,8 @@
 % CONTENT SLIDES
 % =================================================
 
+\begin{comment}
+
 \begin{frame}{Air Hockey Environment}
 
 \begin{columns}[T]
@@ -95,6 +99,8 @@
 \end{columns}
 
 \end{frame}
+
+\end{comment}
 
 % =================================================
 % =================================================
@@ -131,8 +137,9 @@ y = r + \gamma(1{-}d)\;\min_{i=1,2} Q_{\phi_i'}(s', \tilde a')
   \item Polyak averaging: $\phi' \leftarrow \tau\,\phi + (1{-}\tau)\,\phi'$
 \end{itemize}
 
-\vspace{0.2cm}
 
+\vspace{0.2cm}
+  
 \textbf{Architecture}
 \vspace{0.1cm}
 
@@ -144,11 +151,12 @@ y = r + \gamma(1{-}d)\;\min_{i=1,2} Q_{\phi_i'}(s', \tilde a')
 
 \end{columns}
 
+
 \end{frame}
 
 % =================================================
 % =================================================
-
+\begin{comment}
 \begin{frame}{Exploration Noise \& Replay}
 
 \begin{columns}[T]
@@ -194,6 +202,7 @@ Target noise / clip & 0.2 / 0.3 \\
 \end{columns}
 
 \end{frame}
+\end{comment}
 
 % =================================================
 % =================================================
@@ -218,7 +227,7 @@ Target noise / clip & 0.2 / 0.3 \\
   0\% Self-Play
 };
 
-\node[stage, right=0.9cm of s1] (s2) {
+\node[stage, right=2cm of s1] (s2) {
   \textbf{Stage II}\\[2pt]
   25k episodes\\[3pt]
   45--55\% Strong\\
@@ -226,7 +235,7 @@ Target noise / clip & 0.2 / 0.3 \\
   0--10\% Self-Play
 };
 
-\node[stage, right=0.9cm of s2] (s3) {
+\node[stage, right=2cm of s2] (s3) {
   \textbf{Stage III}\\[2pt]
   12k episodes\\[3pt]
   30--60\% Strong\\
@@ -234,8 +243,8 @@ Target noise / clip & 0.2 / 0.3 \\
   0--30\% Self-Play
 };
 
-\draw[arr] (s1) -- (s2) node[midway, above, font=\tiny\itshape] {WR$_{\text{weak}}{>}85\%$};
-\draw[arr] (s2) -- (s3) node[midway, above, font=\tiny\itshape] {WR$_{\text{weak}}{>}85\%$};
+\draw[arr] (s1) -- (s2);
+\draw[arr] (s2) -- (s3);
 
 \node[below=0.2cm of s1, font=\tiny, midtext] {Puck control};
 \node[below=0.2cm of s2, font=\tiny, midtext] {Mixed opponents};
@@ -249,6 +258,60 @@ Target noise / clip & 0.2 / 0.3 \\
 \textbf{Self-Play Pool:}\;
 Snapshots every $k{=}150$ eps $\;\cdot\;$ Pool $N_{\text{pool}}{=}25$
 $\;\cdot\;$ Difficulty-weighted sampling ($\times 1.2$ loss, $\times 0.95$ win)
+
+\end{frame}
+
+% =================================================
+% =================================================
+
+\begin{frame}{Curriculum Training Progression}
+
+\textit{Training curves for a representative single-seed run (see report Figure~1).}
+
+\vspace{0.3cm}
+
+\begin{center}
+\begin{tikzpicture}[
+  card/.style={
+    rectangle, rounded corners=3pt, draw=accent!40, fill=cardbg,
+    minimum width=3.2cm, minimum height=2.0cm, align=center, font=\small,
+    inner sep=6pt
+  }
+]
+
+\node[card] (c1) {
+  \textbf{Stage I}\\[3pt]
+  WR Weak: $\sim$95\%\\
+  WR Strong: $\sim$30\%\\[2pt]
+  {\scriptsize\textcolor{midtext}{Overfits to weak}}
+};
+
+\node[card, right=0.8cm of c1] (c2) {
+  \textbf{Stage II}\\[3pt]
+  WR Weak: $\sim$95\%\\
+  WR Strong: $\sim$80\%\\[2pt]
+  {\scriptsize\textcolor{midtext}{Mixed schedule}}
+};
+
+\node[card, right=0.8cm of c2] (c3) {
+  \textbf{Stage III}\\[3pt]
+  WR Weak: $\sim$95\%\\
+  WR Strong: $\sim$85\%\\[2pt]
+  {\scriptsize\textcolor{wingreen}{Competition-ready}}
+};
+
+\draw[-{Stealth}, thick, accent] (c1) -- (c2);
+\draw[-{Stealth}, thick, accent] (c2) -- (c3);
+
+\end{tikzpicture}
+\end{center}
+
+\vspace{0.3cm}
+
+\begin{itemize}
+  \item Without curriculum: strong win rate stays at $\sim$30\% (pure weak training)
+  \item Staged scheduling resolves this while retaining high weak win rates
+\end{itemize}
 
 \end{frame}
 
@@ -322,55 +385,34 @@ PER, Self-Play & 78.3 $\pm$ 2.2 & 65.3 $\pm$ 5.1 & 4.71 $\pm$ 0.54 & 1.78 $\pm$ 
 
 % -------------------------------------------------
 
-\begin{frame}{Curriculum Training Progression}
 
-\textit{Training curves for a representative single-seed run (see report Figure~1).}
 
-\vspace{0.3cm}
+% =================================================
+% =================================================
 
-\begin{center}
-\begin{tikzpicture}[
-  card/.style={
-    rectangle, rounded corners=3pt, draw=accent!40, fill=cardbg,
-    minimum width=3.2cm, minimum height=2.0cm, align=center, font=\small,
-    inner sep=6pt
-  }
-]
+\begin{frame}{Gameplay Examples}
 
-\node[card] (c1) {
-  \textbf{Stage I}\\[3pt]
-  WR Weak: $\sim$95\%\\
-  WR Strong: $\sim$30\%\\[2pt]
-  {\scriptsize\textcolor{midtext}{Overfits to weak}}
-};
+\begin{columns}
 
-\node[card, right=0.8cm of c1] (c2) {
-  \textbf{Stage II}\\[3pt]
-  WR Weak: $\sim$95\%\\
-  WR Strong: $\sim$80\%\\[2pt]
-  {\scriptsize\textcolor{midtext}{Mixed schedule}}
-};
+\column{0.5\textwidth}
+\centering
+\textbf{vs. Weak Opponent}
 
-\node[card, right=0.8cm of c2] (c3) {
-  \textbf{Stage III}\\[3pt]
-  WR Weak: $\sim$95\%\\
-  WR Strong: $\sim$85\%\\[2pt]
-  {\scriptsize\textcolor{wingreen}{Competition-ready}}
-};
+\includegraphics[width=\linewidth]{assets/hockeyenv1.png}
 
-\draw[-{Stealth}, thick, accent] (c1) -- (c2);
-\draw[-{Stealth}, thick, accent] (c2) -- (c3);
+\vspace{0.2cm}
+{\small File: gameplay\_weak.mov}
 
-\end{tikzpicture}
-\end{center}
+\column{0.5\textwidth}
+\centering
+\textbf{vs. Strong Opponent}
 
-\vspace{0.3cm}
+\includegraphics[width=\linewidth]{assets/hockeyenv2.png}
 
-\begin{itemize}
-  \item Without curriculum: strong win rate stays at $\sim$30\% (pure weak training)
-  \item Staged scheduling resolves this while retaining high weak win rates
-  \item Model selection via $\min(\text{WR}_{\text{weak}}, \text{WR}_{\text{strong}})$ enforces robustness
-\end{itemize}
+\vspace{0.2cm}
+{\small File: gameplay\_strong.mov}
+
+\end{columns}
 
 \end{frame}
 
@@ -432,10 +474,11 @@ WR Strong & $\sim$85\% \\
 \end{frame}
 
 % -------------------------------------------------
-
-\begin{frame}[standout]
+\begin{comment}
+  \begin{frame}[standout]
   Thank you! \\ \vspace{0.3cm}
   {\normalsize Questions?}
 \end{frame}
+\end{comment}
 
 \end{document}
